@@ -1,7 +1,7 @@
 const pool = require('./dbConn');
 require('dotenv').config();
 
-const FIELDS = ["id", "name", "surname", "nickname", "at_sign", "birthday", "gender", "description", "current_profile_pic", "current_cover_pic", "list_positive", "list_negative", "list_positive_external", "list_negative_external", "services", "api_code"];
+const FIELDS = ["id", "name", "surname", "nickname", "at_sign", "birthday", "gender", "description", "current_profile_pic", "current_cover_pic", "list_positive", "list_negative", "list_positive_external", "list_negative_external", "services", "api_code", "verified", "verify_key_refresh"];
 
 async function retrieveUserData(userId) {
     try {
