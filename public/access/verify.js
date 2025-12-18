@@ -107,3 +107,5 @@ if(id && verify_key){
     document.getElementById("verify-code-title").textContent = `Email confirmation`;
     verifyKey();
 }
+
+document.getElementById("re-login-register").onclick = () => window.location.href = ENDPOINT+"?service="+serviceKey;

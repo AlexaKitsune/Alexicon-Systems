@@ -149,7 +149,7 @@ label{
     align-items: center;
 }
 
-.end-buttons button, #verification button{
+.end-buttons button, #verification button, #verify-code button{
     font-family: "Roboto Mono", serif;
     border: none;
     border-radius: 100vw;

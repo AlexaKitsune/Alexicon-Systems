@@ -1,4 +1,4 @@
-// services/alexicon/session.js
+// services/alexicon/check_session.js
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const pool = require('../../utils/dbConn');
@@ -7,50 +7,66 @@ require('dotenv').config();
 const router = express.Router();
 
 /**
- * GET /alexicon/session
+ * GET /alexicon/check_session
  * Header: Authorization: Bearer <token>
  * Respuestas:
  *  - 200 { status:"ok", user_id, exp, now }
- *  - 401 { status:"error", message:"Invalid or expired token." }
+ *  - 401 { status:"error", message:"..." }
  */
 router.get('/check_session', async (req, res) => {
     try {
         const authHeader = req.headers.authorization || '';
-        if (!authHeader.startsWith('Bearer '))
+        if (!authHeader.startsWith('Bearer ')) {
             return res.status(401).json({ status: 'error', message: 'Missing or invalid token.' });
+        }
 
-        const token = authHeader.split(' ')[1];
+        const token = authHeader.slice(7).trim();
+        if (!token) {
+            return res.status(401).json({ status: 'error', message: 'Missing or invalid token.' });
+        }
 
-        // 1) Verificar firma/exp del JWT
+        // 1) Verificar firma + exp del JWT
         let decoded;
         try {
-            decoded = jwt.verify(token, process.env.JWT_SECRET_KEY); // lanza si expiró o firma inválida
+            decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
         } catch {
             return res.status(401).json({ status: 'error', message: 'Invalid or expired token.' });
         }
 
-        const userId = Number(decoded.sub);
-        const jti = decoded.jti;
-        if (!Number.isFinite(userId) || !jti)
-            return res.status(401).json({ status: 'error', message: 'Invalid token payload.' });
+        const userIdRaw = decoded?.sub;
+        const userId = Number(userIdRaw);
+        const jti = decoded?.jti;
 
-        // 2) Verificar que el jti siga activo en base de datos
+        if (!Number.isFinite(userId) || userId <= 0 || !jti) {
+            return res.status(401).json({ status: 'error', message: 'Invalid token payload.' });
+        }
+
+        // 2) Confirmar que el token siga activo y no esté vencido en DB (UTC)
         const [rows] = await pool.execute(
-            'SELECT 1 FROM active_tokens WHERE jti = ? AND user_id = ? LIMIT 1',
+            `
+            SELECT 1
+            FROM active_tokens
+            WHERE jti = ?
+                AND user_id = ?
+                AND expires_at > UTC_TIMESTAMP()
+            LIMIT 1
+            `,
             [jti, userId]
         );
-        if (!rows.length)
-            return res.status(401).json({ status: 'error', message: 'Session revoked.' });
+
+        if (!rows.length) {
+            return res.status(401).json({ status: 'error', message: 'Session revoked or expired.' });
+        }
 
         // 3) OK
         return res.json({
             status: 'ok',
             user_id: userId,
-            exp: decoded.exp,                   // seg UNIX
-            now: Math.floor(Date.now() / 1000), // seg UNIX
+            exp: decoded.exp,                   // segundos UNIX (del JWT)
+            now: Math.floor(Date.now() / 1000), // segundos UNIX
         });
     } catch (err) {
-        console.error('session check error:', err);
+        console.error('check_session error:', err);
         return res.status(500).json({ status: 'error', message: 'Server error.' });
     }
 });

@@ -1,5 +1,5 @@
 export function TOKEN(){
-    return JSON.parse(localStorage.getItem("AlexiconUserData")).token;
+    return JSON.parse(localStorage.getItem("AlexiconUserData") || '{}')?.token;
 }
 
 function buildFormData(obj = {}){
