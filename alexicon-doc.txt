@@ -1,0 +1,191 @@
+
+Estructra de servicios del backend:
+
+    ALEXICON (alexicon/)
+
+        /auth
+            POST   /register
+            POST   /login
+            POST   /logout              *JWT
+            GET    /session             *JWT
+            POST   /verify-email
+            POST   /verify-resend
+
+        /users
+            GET    /me                 *JWT
+            GET    /:id                JWT opcional
+            PATCH  /me/profile         *JWT
+            PATCH  /me/password        *JWT
+            POST   /me/avatar          *JWT
+            POST   /me/cover           *JWT
+            GET    /at/:at
+
+        /social
+            POST   /:id/follow         *JWT
+            DELETE /:id/follow         *JWT
+            POST   /:id/block          *JWT
+            DELETE /:id/block          *JWT
+            GET    /mentions?q=        *JWT
+            GET    /blocked            *JWT
+
+        /media
+            POST   /                    *JWT
+            GET    /:id
+
+        /notifications
+            GET    /                    *JWT
+            PATCH  /:id/read            *JWT
+            PATCH  /read-all            *JWT
+
+        /content
+            POST   /report/:id          *JWT
+
+        /settings
+            GET    /me       *JWT
+            PATCH  /me       *JWT
+
+        /status
+            GET    /on
+
+        /api-keys
+            GET    /                 *JWT
+            POST   /                 *JWT
+            DELETE /:id              *JWT
+
+        /services
+            GET    /me               *JWT
+
+        /subscriptions
+            POST    /preview        *JWT
+            POST    /checkout-test  *JWT
+            GET     /me             *JWT
+
+        /credits
+            GET     /me             *JWT
+            POST    /checkout-test  *JWT
+            GET     /transactions   *JWT
+
+    YIPNET (yipnet/)
+
+        /posts
+            POST   /                    *JWT
+            GET    /feed                *JWT
+            GET    /user/:id            JWT opcional
+            GET    /:id                 JWT opcional
+            DELETE /:id                 *JWT
+            PATCH  /:id            *JWT
+
+        /comments
+            POST   /post/:postId        *JWT
+            GET    /:id                 JWT opcional
+            DELETE /:id                 *JWT
+            PATCH  /:id                 *JWT
+            GET    /post/:postId        JWT opcional // lista los comentarios de un post. Puede hacerlo con paginación.
+
+        /messages
+            POST   /conversations                           *JWT
+            GET    /conversations                           *JWT
+            GET    /conversations/:id                       *JWT
+            POST   /conversations/:id                       *JWT
+            PATCH  /conversations/:id                       *JWT
+            DELETE /conversations/:id/leave                 *JWT
+            POST   /direct/:userId                          *JWT
+            POST   /conversations/:id/participants          *JWT
+            DELETE /conversations/:id/participants/:userId  *JWT
+            PATCH  /conversations/:id/participants/:userId/role *JWT
+
+        /votes
+            PUT    /:targetType/:targetId      *JWT
+            DELETE /:targetType/:targetId      *JWT
+            GET    /:targetType/:targetId      JWT opcional
+
+        /stats
+            POST   /view/:targetType/:targetId    JWT opcional
+            GET    /:targetType/:targetId         *JWT
+            GET    /profile/:userId/contributions JWT opcional
+
+        /search
+            GET /global      *JWT opcional
+            GET /profile/:userId  JWT opcional
+
+    ALYX (alyx/)
+
+        /chats
+            GET   /                    *JWT
+            POST  /                    *JWT
+            GET   /:id                 *JWT
+            PATCH /:id                 *JWT
+            DELETE /:id                *JWT
+
+        /projects
+            GET   /                    *JWT
+            POST  /                    *JWT
+            GET   /:id                 *JWT
+            PATCH /:id                 *JWT
+            DELETE /:id                *JWT
+
+            GET   /:id                 *JWT
+            PATCH /:id                 *JWT
+            DELETE /:id                *JWT
+
+        /messages
+            GET   /chat/:chatId                 *JWT
+            POST  /chat/:chatId                 *JWT
+            POST  /chat/:chatId/respond         *JWT
+            POST  /chat/:chatId/respond-stream  *JWT
+
+        /usage
+            GET    /me               *JWT
+        
+        
+Para el backend, instalar:
+    npm install express bcrypt cors dotenv jsonwebtoken mime-types multer mysql2 sharp socket.io helmet express-rate-limit zod openai
+
+Todos los fontends con vue deben ser creados con: dependencias de producción y desarrollo:
+    npm install @nuxt/ui vue-i18n socket.io-client @capacitor/core @capacitor/app
+    npm install -D tailwindcss @capacitor/cli stylus
+    npm install mammoth xlsx three
+Crear:
+    npm create vue@latest
+
+Y toda estructura de archivos deberá contener siempre estos archivos:
+
+/
+├── src/
+│   ├── assets/
+│   │   └── css
+│   │       └── main.css
+│   ├── components/
+│   │   ├── MediaProtected.vue
+│   │   └── SubscriptionPill.vue
+│   ├── i18n/
+│   │   └── index.js
+│   ├── layouts/
+│   │   └── MainLayout.vue
+│   ├── router/
+│   │   └── index.js (modificar según proyecto)
+│   ├── services/
+│   │   ├── alexicon/ (obligatorio)
+│   │   │   ├── auth.js
+│   │   │   ├── content.js
+│   │   │   ├── media.js
+│   │   │   ├── notifications.js
+│   │   │   ├── settings.js
+│   │   │   ├── social.js
+│   │   │   └── users.js
+│   │   ├── yipnet/
+│   │   │   ├── comments.js
+│   │   │   ├── messages.js
+│   │   │   ├── posts.js
+│   │   │   ├── search.js
+│   │   │   ├── stats.js
+│   │   │   └── votes.js
+│   │   └── api.js
+│   ├── views/
+│   │   └── Access.vue
+│   ├── App.vue
+│   └── main.js
+├── .env
+└── vite.config.js
+
+El contenido para insertar en cada componente viene dentro de la carpeta /doc en este repositorio, con su contenido listo para copiar y pegar en el proyecto de vue.

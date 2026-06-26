@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
-const createDatabase = require('./utils/dbSetup');
+const createDatabase = require('./utils/db_setup');
 createDatabase();
 
 const app = express();
@@ -17,48 +17,43 @@ const PORT = process.env.PORT || 5001;
 
 app.use(cors());
 app.use(express.json());
+app.use(
+    '/badges',
+    express.static(path.join(__dirname, 'storage', 'badges'))
+);
 
-const routeNames = [
-    'alexicon/api',
-    'alexicon/block',
-    'alexicon/check_session',
-    'alexicon/follow',
-    'alexicon/login',
-    'alexicon/logout',
-    'alexicon/media_by_id',
-    'alexicon/notification_seen',
-    'alexicon/notifications',
-    'alexicon/on',
-    'alexicon/refresh_verify_key',
-    'alexicon/register',
-    'alexicon/report',
-    'alexicon/retrieve_users',
-    'alexicon/retrieve',
-    'alexicon/update_pass',
-    'alexicon/update_pics',
-    'alexicon/update_profile',
-    'alexicon/upload',
-    'alexicon/verify',
+const routes = [
+    ['alexicon/auth', require('./services/alexicon/auth')],
+    ['alexicon/users', require('./services/alexicon/users')],
+    ['alexicon/social', require('./services/alexicon/social')],
+    ['alexicon/media', require('./services/alexicon/media')],
+    ['alexicon/notifications', require('./services/alexicon/notifications')],
+    ['alexicon/content', require('./services/alexicon/content')],
+    ['alexicon/settings', require('./services/alexicon/settings')],
+    ['alexicon/badges', require('./services/alexicon/badges')],
+    ['alexicon/on', require('./services/alexicon/status')],
+    ['alexicon/api-keys', require('./services/alexicon/api_keys')],
+    ['alexicon/services', require('./services/alexicon/services')],
+    ['alexicon/subscriptions', require('./services/alexicon/subscriptions')],
+    ['alexicon/credits', require('./services/alexicon/credits')],
 
-    'yipnet/comment',
-    'yipnet/delete',
-    'yipnet/get_messages',
-    'yipnet/get_single_comment',
-    'yipnet/get_single_post',
-    'yipnet/list_comments',
-    'yipnet/list_messages',
-    'yipnet/list_posts',
-    'yipnet/message',
-    'yipnet/newsfeed',
-    'yipnet/post',
-    'yipnet/retrieve_posts',
-    'yipnet/vote',
+    ['yipnet/posts', require('./services/yipnet/posts')],
+    ['yipnet/comments', require('./services/yipnet/comments')],
+    ['yipnet/messages', require('./services/yipnet/messages')],
+    ['yipnet/votes', require('./services/yipnet/votes')],
+    ['yipnet/stats', require('./services/yipnet/stats')],
+    ['yipnet/search', require('./services/yipnet/search')],
+
+    ['alyx/chats', require('./services/alyx/chats')],
+    ['alyx/projects', require('./services/alyx/projects')],
+    ['alyx/messages', require('./services/alyx/messages')],
+    ['alyx/usage', require('./services/alyx/usage')],
+    //['alyx/api-keys', require('./services/alyx/api_keys')],
 ];
 
-routeNames.forEach(r => app.use(
-    '/' + r.split('/')[0],
-    require(`./services/${r}`)
-));
+routes.forEach(([route, router]) => {
+    app.use(`/${route}`, router);
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/public', express.static(path.join(__dirname, 'public')));

@@ -1,0 +1,185 @@
+/* src/assets/css/main.css */
+@import "tailwindcss";
+@import "@nuxt/ui";
+
+:root {
+    color-scheme: light dark;
+
+    --ui-primary: white;
+    --ui-secondary: #7700ff;
+    --ui-neutral: gray !important;
+
+    --alexicon-primary: #7700ff;
+    --alexicon-bg: white;
+    --alexicon-surface: #f2f2f2;
+    --alexicon-main: white;
+    --alexicon-text: black;
+
+    --alexicon-input-border: #aaaaaa;
+    --alexicon-input-bg: white;
+    --alexicon-input-text: black;
+
+    --alexicon-active-bg: #dddddd;
+    --alexicon-active-text: black;
+}
+
+.dark {
+    --alexicon-bg: #222222;
+    --alexicon-surface: #2d2d2d;
+    --alexicon-main: rgb(30, 30, 30);
+    --alexicon-text: white;
+
+    --alexicon-input-border: #4c4c4c;
+    --alexicon-input-bg: white;
+    --alexicon-input-text: black;
+
+    --alexicon-active-bg: #3a3a3a;
+    --alexicon-active-text: white;
+}
+
+body {
+    margin: 0;
+    background-color: var(--alexicon-bg);
+    color: var(--alexicon-text);
+}
+
+*:not(.Alexicon-unfont) {
+    font-family: "Roboto Mono", monospace;
+}
+
+header,
+aside {
+    border: none !important;
+}
+
+input,
+textarea {
+    color: var(--alexicon-input-text);
+}
+
+/* Link activo del sidebar */
+[data-slot="link"][data-active]::before {
+    background-color: var(--alexicon-active-bg) !important;
+}
+
+[data-slot="link"][data-active] {
+    color: var(--alexicon-active-text) !important;
+    font-weight: 600;
+}
+
+[data-slot="link"][data-active] svg {
+    color: var(--alexicon-active-text) !important;
+}
+
+/* Por si Nuxt UI usa data-current en algún componente */
+[data-current="true"] {
+    background-color: var(--alexicon-active-bg) !important;
+    color: var(--alexicon-active-text) !important;
+}
+
+form input,
+form select,
+form textarea {
+    background-color: white !important;
+    color: black !important;
+    border: none !important;
+}
+
+.dark form input,
+.dark form select,
+.dark form textarea,
+.dark [data-slot="input"] {
+    background-color: black !important;
+    color: white !important;
+    border: none !important;
+}
+
+[data-slot="input"],
+[data-slot="password"],
+[data-slot="select"],
+[data-slot="select-trigger"],
+[data-slot="combobox"],
+[data-slot="combobox-trigger"] {
+    background-color: #000 !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: none !important;
+    --tw-ring-color: transparent !important;
+}
+
+[data-slot="input"]:hover,
+[data-slot="input"]:focus,
+[data-slot="input"]:focus-visible,
+[data-slot="password"]:hover,
+[data-slot="password"]:focus,
+[data-slot="password"]:focus-visible,
+[data-slot="select"]:hover,
+[data-slot="select"]:focus,
+[data-slot="select"]:focus-visible,
+[data-slot="select-trigger"]:hover,
+[data-slot="select-trigger"]:focus,
+[data-slot="select-trigger"]:focus-visible,
+[data-slot="combobox"]:hover,
+[data-slot="combobox"]:focus,
+[data-slot="combobox"]:focus-visible,
+[data-slot="combobox-trigger"]:hover,
+[data-slot="combobox-trigger"]:focus,
+[data-slot="combobox-trigger"]:focus-visible {
+    background-color: #000 !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 0 0 1px var(--alexicon-primary) !important;
+    --tw-ring-color: var(--alexicon-primary) !important;
+}
+
+[data-slot="password"] + button,
+[data-slot="trailing"],
+[data-slot="select-trailing"],
+[data-slot="combobox-trailing"] {
+    color: #aaaaaa !important;
+}
+
+[data-slot="input"]::placeholder {
+    color: #aaaaaa !important;
+}
+
+.ACCESS_LAYOUT [data-slot="input"],
+.ACCESS_LAYOUT [data-slot="password"],
+.ACCESS_LAYOUT [data-slot="base"]:not(button) {
+    background-color: #000 !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: none !important;
+    --tw-ring-color: transparent !important;
+}
+
+.ACCESS_LAYOUT [data-slot="input"]:hover,
+.ACCESS_LAYOUT [data-slot="input"]:focus,
+.ACCESS_LAYOUT [data-slot="input"]:focus-visible,
+.ACCESS_LAYOUT [data-slot="password"]:hover,
+.ACCESS_LAYOUT [data-slot="password"]:focus,
+.ACCESS_LAYOUT [data-slot="password"]:focus-visible,
+.ACCESS_LAYOUT [data-slot="base"]:hover:not(button),
+.ACCESS_LAYOUT [data-slot="base"]:focus:not(button),
+.ACCESS_LAYOUT [data-slot="base"]:focus-visible:not(button) {
+    background-color: #000 !important;
+    color: white !important;
+    border: none !important;
+    box-shadow: 0 0 0 1px var(--alexicon-primary) !important;
+    --tw-ring-color: var(--alexicon-primary) !important;
+}
+
+.bg-default,
+.hover\:bg-elevated:hover {
+    background-color: #000 !important;
+}
+
+.ring-accented {
+    --tw-ring-color: transparent !important;
+}
+
+[data-slot="trailing"],
+[data-slot="trailingIcon"] {
+    color: #aaaaaa !important;
+}
+/* Here ends the universal styles for layouts. From here, styles may vary depending on the project */

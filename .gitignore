@@ -1,7 +1,12 @@
-node_modules
-storage/alexicon
-storage/yipnet
-test
+node_modules/
+
 .env
 
-utils/validateRequest.js
+**/.DS_Store
+.DS_Store
+
+storage/*
+!storage/badges/
+!storage/badges/**
+
+!storage/badges/.gitkeep
